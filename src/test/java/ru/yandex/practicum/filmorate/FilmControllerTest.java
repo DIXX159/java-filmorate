@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.HashMap;
+import java.util.List;
 
 import static ru.yandex.practicum.filmorate.controller.FilmController.films;
 
@@ -30,10 +30,10 @@ public class FilmControllerTest {
     @Test
     @DisplayName("Проверка GET запроса")
     void getFilmsTest() throws ValidationException {
-        HashMap<Integer, Film> films = FilmController.findAll();
+        List<Film> films = FilmController.findAll();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(films.size(), 2),
-                () -> Assertions.assertEquals(films.get(2).getName(), "Фильм 2")
+                () -> Assertions.assertEquals(films.get(1).getName(), "Фильм 2")
         );
     }
 

@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.HashMap;
+import java.util.List;
 
 import static ru.yandex.practicum.filmorate.controller.UserController.users;
 
@@ -14,7 +14,7 @@ public class UserControllerTest {
     @BeforeEach
     void beforeEach() throws ValidationException {
         users.clear();
-        UserController.idGenerator = 1;
+        //UserController.idGenerator = 1;
         User user1 = new User();
         user1.setEmail("user1@user.com");
         user1.setLogin("User1");
@@ -32,10 +32,10 @@ public class UserControllerTest {
     @Test
     @DisplayName("Проверка GET запроса")
     void getUsersTest() throws ValidationException {
-        HashMap<Integer, User> users = UserController.findAll();
+        List<User> users = UserController.findAll();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(users.size(), 2),
-                () -> Assertions.assertEquals(users.get(2).getName(), "User2 User2")
+                () -> Assertions.assertEquals(users.get(1).getName(), "User2 User2")
         );
     }
 
@@ -77,7 +77,7 @@ public class UserControllerTest {
         User user3 = new User();
         user3.setEmail("user3@user.com");
         user3.setLogin("User3");
-        user3.setName(" ");
+        //user3.setName("");
         user3.setBirthday("1993-03-03");
 
         UserController.create(user3);

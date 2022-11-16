@@ -9,7 +9,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -19,10 +21,10 @@ public class FilmController {
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
 
     @GetMapping("/films")
-    public static HashMap<Integer, Film> findAll() throws ValidationException {
+    public static List<Film> findAll() throws ValidationException {
         log.debug("Текущее количество пользователей: {}", films.size());
         if (!films.isEmpty()) {
-            return films;
+            return new ArrayList<>(films.values());
         }
         throw new ValidationException("список фильмов пуст");
     }
@@ -46,18 +48,22 @@ public class FilmController {
 
     private static Film getFilm(@Valid @RequestBody @NotNull Film film) throws ValidationException {
         if (film.getName().isBlank()) {
+            idGenerator--;
             log.info("название не может быть пустым");
             throw new ValidationException("название не может быть пустым");
         }
         if (film.getDescription().length() > 200) {
+            idGenerator--;
             log.debug("максимальная длина описания — 200 символов");
             throw new ValidationException("максимальная длина описания — 200 символов");
         }
         if (LocalDate.parse(film.getReleaseDate(), formatter).isBefore(LocalDate.of(1895, 12, 28))) {
+            idGenerator--;
             log.debug("дата релиза — не раньше 28 декабря 1895 года");
             throw new ValidationException("дата релиза — не раньше 28 декабря 1895 года");
         }
         if (film.getDuration() <= 0) {
+            idGenerator--;
             log.debug("продолжительность фильма должна быть положительной");
             throw new ValidationException("продолжительность фильма должна быть положительной");
         } else {
@@ -66,5 +72,4 @@ public class FilmController {
             return film;
         }
     }
-
 }
