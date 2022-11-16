@@ -14,7 +14,7 @@ public class UserControllerTest {
     @BeforeEach
     void beforeEach() throws ValidationException {
         users.clear();
-        //UserController.idGenerator = 1;
+        UserController.idGenerator = 1;
         User user1 = new User();
         user1.setEmail("user1@user.com");
         user1.setLogin("User1");
@@ -67,7 +67,7 @@ public class UserControllerTest {
         UserController.update(user3);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(users.size(), 2),
-                () -> Assertions.assertEquals(users.get(2).getName(), "User3 User3")
+                () -> Assertions.assertEquals(users.get(user3.getId()).getName(), "User3 User3")
         );
     }
 
