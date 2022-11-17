@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.*;
 import ru.yandex.practicum.filmorate.controller.UserController;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Проверка GET запроса")
-    void getUsersTest() throws ValidationException {
+    void getUsersTest() {
         List<User> users = UserController.findAll();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(users.size(), 2),
@@ -43,7 +43,7 @@ public class UserControllerTest {
     @DisplayName("Проверка POST запроса")
     void postUserTest() throws ValidationException {
         User user3 = new User();
-        user3.setEmail("user3@user.com");
+        user3.setEmail("user3user.com@");
         user3.setLogin("User3");
         user3.setName("User3 User3");
         user3.setBirthday("1993-03-03");
@@ -77,7 +77,7 @@ public class UserControllerTest {
         User user3 = new User();
         user3.setEmail("user3@user.com");
         user3.setLogin("User3");
-        //user3.setName("");
+        user3.setName("");
         user3.setBirthday("1993-03-03");
 
         UserController.create(user3);

@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.*;
 import ru.yandex.practicum.filmorate.controller.FilmController;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class FilmControllerTest {
 
     @Test
     @DisplayName("Проверка GET запроса")
-    void getFilmsTest() throws ValidationException {
+    void getFilmsTest() {
         List<Film> films = FilmController.findAll();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(films.size(), 2),

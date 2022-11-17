@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
@@ -23,16 +23,14 @@ public class UserController {
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
 
     @GetMapping("/users")
-    public static List<User> findAll() throws ValidationException {
+    public static List<User> findAll() {
         log.debug("Текущее количество пользователей: {}", users.size());
-        if (!users.isEmpty()) {
-            return new ArrayList<>(users.values());
-        }
-        throw new ValidationException("список пользователей пуст");
+        return new ArrayList<>(users.values());
     }
 
     @PostMapping(value = "/users")
     public static User create(@Valid @RequestBody @NotNull User user) throws ValidationException {
+        log.debug("Создание пользователя: {}", user.getName());
         int id = idGenerator++;
         user.setId(id);
         return getUser(user);
@@ -40,14 +38,17 @@ public class UserController {
 
     @PutMapping(value = "/users")
     public static User update(@Valid @RequestBody @NotNull User user) throws ValidationException {
+        log.debug("Обновление пользователя: {}", user.getName());
         for (int id : users.keySet()) {
             if (user.getId() == id) {
                 return getUser(user);
             }
         }
+        log.debug("такого пользователя нет");
         throw new ValidationException("такого пользователя нет");
     }
 
+    @Validated
     private static User getUser(@Valid @RequestBody @NotNull User user) throws ValidationException {
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
             idGenerator--;
@@ -57,6 +58,9 @@ public class UserController {
             idGenerator--;
             log.debug("логин не может быть пустым и содержать пробелы");
             throw new ValidationException("логин не может быть пустым и содержать пробелы");
+        } else if (user.getBirthday() == null) {
+            log.debug("дата рождения не может быть пустой");
+            throw new ValidationException("дата рождения не может быть пустой");
         } else if (LocalDate.parse(user.getBirthday(), formatter).isAfter(LocalDate.now())) {
             idGenerator--;
             log.debug("дата рождения не может быть в будущем");
