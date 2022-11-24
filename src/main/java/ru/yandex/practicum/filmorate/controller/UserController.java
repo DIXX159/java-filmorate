@@ -30,9 +30,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/users")
-    public User create(@Valid @RequestBody @NotNull User user) throws ValidationException {
+    public User create(@Valid @RequestBody @NotNull User user) {
         return inMemoryUserStorage.addUser(user);
-
     }
 
     @PutMapping(value = "/users")

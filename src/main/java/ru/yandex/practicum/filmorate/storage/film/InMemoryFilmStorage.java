@@ -32,11 +32,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void deleteFilm(int id) {
-
-    }
-
-    @Override
     public Film updateFilm(Film film) throws ValidationException {
         logger.debug("Обровление фильма: {}", film.getName());
         for (int id : films.keySet()) {
@@ -55,25 +50,10 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Validated
     private Film getFilm(@Valid @NotNull Film film) throws ValidationException {
-        if (film.getName().isBlank()) {
-            idGenerator--;
-            logger.debug("название не может быть пустым");
-            throw new ValidationException("название не может быть пустым");
-        }
-        if (film.getDescription().length() > 200) {
-            idGenerator--;
-            logger.debug("максимальная длина описания — 200 символов");
-            throw new ValidationException("максимальная длина описания — 200 символов");
-        }
-        if (LocalDate.parse(film.getReleaseDate(), formatter).isBefore(LocalDate.of(1895, 12, 28))) {
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             idGenerator--;
             logger.debug("дата релиза — не раньше 28 декабря 1895 года");
             throw new ValidationException("дата релиза — не раньше 28 декабря 1895 года");
-        }
-        if (film.getDuration() <= 0) {
-            idGenerator--;
-            logger.debug("продолжительность фильма должна быть положительной");
-            throw new ValidationException("продолжительность фильма должна быть положительной");
         } else {
             films.put(film.getId(), film);
             logger.info("Сохранен фильм: {}", film.getId());

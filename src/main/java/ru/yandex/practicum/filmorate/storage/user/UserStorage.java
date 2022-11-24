@@ -7,7 +7,5 @@ public interface UserStorage {
 
     User addUser(User user) throws ValidationException;
 
-    void deleteUser(int id);
-
     User updateUser(User user) throws ValidationException;
 }

@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,16 +25,11 @@ public class InMemoryUserStorage implements UserStorage {
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
 
     @Override
-    public User addUser(User user) throws ValidationException {
+    public User addUser(User user) {
         logger.debug("Создание пользователя: {}", user.getName());
         int id = idGenerator++;
         user.setId(id);
         return getUser(user);
-    }
-
-    @Override
-    public void deleteUser(int id) {
-
     }
 
     @Override
@@ -56,23 +50,8 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Validated
-    public User getUser(@Valid @RequestBody @NotNull User user) throws ValidationException {
-        if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            idGenerator--;
-            logger.debug("электронная почта не может быть пустой и должна содержать символ '@'");
-            throw new ValidationException("электронная почта не может быть пустой и должна содержать символ '@'");
-        } else if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            idGenerator--;
-            logger.debug("логин не может быть пустым и содержать пробелы");
-            throw new ValidationException("логин не может быть пустым и содержать пробелы");
-        } else if (user.getBirthday() == null) {
-            logger.debug("дата рождения не может быть пустой");
-            throw new ValidationException("дата рождения не может быть пустой");
-        } else if (LocalDate.parse(user.getBirthday(), formatter).isAfter(LocalDate.now())) {
-            idGenerator--;
-            logger.debug("дата рождения не может быть в будущем");
-            throw new ValidationException("дата рождения не может быть в будущем");
-        } else if (user.getName() == null || user.getName().isBlank()) {
+    public User getUser(@Valid @RequestBody @NotNull User user) {
+        if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
             users.put(user.getId(), user);
             logger.info("Сохранен пользователь: {}", user.getId());

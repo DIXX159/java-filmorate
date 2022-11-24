@@ -7,7 +7,5 @@ public interface FilmStorage {
 
     Film addFilm(Film film) throws ValidationException;
 
-    void deleteFilm(int id);
-
     Film updateFilm(Film film) throws ValidationException;
 }
