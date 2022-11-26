@@ -5,6 +5,8 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 @Validated
@@ -17,4 +19,11 @@ public class User {
     private String name;
     @Past(message = "дата рождения не может в будущем")
     private LocalDate birthday;
+
+    private final Set<Integer> friends = new LinkedHashSet<>();
+
+    public void addFriend(int friendId){
+        friends.add(friendId);
+    }
+
 }

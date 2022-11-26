@@ -4,13 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +21,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     public static final HashMap<Integer, Film> films = new HashMap<>();
     protected static int idGenerator = 1;
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
 
     @Override
     public Film addFilm(Film film) throws ValidationException {
@@ -40,7 +39,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             }
         }
         logger.debug("такого фильма нет");
-        throw new ValidationException("такого фильма нет");
+        throw new NotFoundException("такого фильма нет");
     }
 
     public List<Film> findAll() {

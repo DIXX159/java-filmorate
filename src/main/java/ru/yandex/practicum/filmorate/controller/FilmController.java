@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -13,24 +13,28 @@ import java.util.Collection;
 @RequestMapping("/films")
 public class FilmController {
 
-    private final InMemoryFilmStorage inMemoryFilmStorage;
+    private final FilmService filmService;
 
-    public FilmController(InMemoryFilmStorage inMemoryFilmStorage) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
     }
 
     @GetMapping
     public Collection<Film> findAll() {
-        return inMemoryFilmStorage.findAll();
+        return filmService.findAll();
+    }
+
+    @GetMapping("/{filmId}")
+    public Film getFilm(@PathVariable("filmId") Integer filmId){return filmService.findFilmById(filmId);
     }
 
     @PostMapping
-    public Film createUser(@Valid @RequestBody Film film) throws ValidationException {
-        return inMemoryFilmStorage.addFilm(film);
+    public Film createFilm(@Valid @RequestBody Film film) throws ValidationException {
+        return filmService.addFilm(film);
     }
 
     @PutMapping
-    public Film updateUser(@RequestBody Film film) throws ValidationException {
-        return inMemoryFilmStorage.updateFilm(film);
+    public Film updateFilm(@RequestBody Film film) throws ValidationException {
+        return filmService.updateFilm(film);
     }
 }

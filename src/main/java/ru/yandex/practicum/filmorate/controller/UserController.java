@@ -1,42 +1,66 @@
 package ru.yandex.practicum.filmorate.controller;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 @Validated
 @RestController
+@RequestMapping("/users")
 public class UserController {
 
-    private final InMemoryUserStorage inMemoryUserStorage;
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final UserService userService;
 
-    public UserController(InMemoryUserStorage inMemoryUserStorage) {
-        this.inMemoryUserStorage = inMemoryUserStorage;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable("id") Integer id) {
+        return userService.findUserById(id);
+    }
+
+    @GetMapping("/{id}/friends")
+    public Set<User> getAllFriends(@PathVariable("id") Integer id) {
+        return userService.getAllFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public Set<User> getCommonFriends(@PathVariable("id") Integer id, @PathVariable("otherId") Integer otherId){
+        return userService.getCommonFriends(id, otherId);
+    }
+
+    @GetMapping
     public List<User> findAll() {
-        return inMemoryUserStorage.findAll();
+        return userService.findAll();
     }
 
-    @PostMapping(value = "/users")
+    @PostMapping
     public User create(@Valid @RequestBody @NotNull User user) {
-        return inMemoryUserStorage.addUser(user);
+        return userService.addUser(user);
     }
 
-    @PutMapping(value = "/users")
-    public User update(@Valid @RequestBody @NotNull User user) throws ValidationException {
-        return inMemoryUserStorage.updateUser(user);
+    @PutMapping
+    public User update(@Valid @RequestBody @NotNull User user) {
+        return userService.updateUser(user);
     }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
+        return userService.addFriend(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
+        return userService.deleteFriend(id, friendId);
+    }
+
 
 }

@@ -6,23 +6,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.controller.UserController;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
 
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
-    public static final HashMap<Integer, User> users = new HashMap<>();
+
     protected static int idGenerator = 1;
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
 
     @Override
     public User addUser(User user) {
@@ -33,7 +30,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User updateUser(User user) throws ValidationException {
+    public User updateUser(User user) {
         logger.debug("Обновление пользователя: {}", user.getName());
         for (int id : users.keySet()) {
             if (user.getId() == id) {
@@ -41,7 +38,7 @@ public class InMemoryUserStorage implements UserStorage {
             }
         }
         logger.debug("такого пользователя нет");
-        throw new ValidationException("такого пользователя нет");
+        throw new NotFoundException("такого пользователя нет");
     }
 
     public List<User> findAll() {
