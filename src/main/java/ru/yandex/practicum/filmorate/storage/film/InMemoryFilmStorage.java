@@ -12,17 +12,16 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    public static final HashMap<Integer, Film> films = new HashMap<>();
+
     protected static int idGenerator = 1;
 
-    @Override
+
     public Film addFilm(Film film) throws ValidationException {
         logger.debug("Добавление фильма: {}", film.getName());
         int id = idGenerator++;

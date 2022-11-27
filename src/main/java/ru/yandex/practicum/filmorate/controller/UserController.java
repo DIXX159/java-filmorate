@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
@@ -33,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public Set<User> getCommonFriends(@PathVariable("id") Integer id, @PathVariable("otherId") Integer otherId){
+    public Set<User> getCommonFriends(@PathVariable("id") Integer id, @PathVariable("otherId") Integer otherId) {
         return userService.getCommonFriends(id, otherId);
     }
 
@@ -61,6 +60,4 @@ public class UserController {
     public User deleteFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
         return userService.deleteFriend(id, friendId);
     }
-
-
 }

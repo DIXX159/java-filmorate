@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Component
@@ -50,13 +51,13 @@ public class InMemoryUserStorage implements UserStorage {
     public User getUser(@Valid @RequestBody @NotNull User user) {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
-            users.put(user.getId(), user);
-            logger.info("Сохранен пользователь: {}", user.getId());
-            return user;
-        } else {
-            users.put(user.getId(), user);
-            logger.info("Сохранен пользователь: {}", user.getId());
-            return user;
         }
+        users.put(user.getId(), user);
+        logger.info("Сохранен пользователь: {}", user.getId());
+        return user;
+    }
+
+    public static HashMap<Integer, User> getUsers() {
+        return new HashMap<>(users);
     }
 }

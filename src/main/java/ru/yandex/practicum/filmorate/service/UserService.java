@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
-import javax.validation.constraints.NotNull;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -17,12 +16,11 @@ import java.util.Set;
 public class UserService extends InMemoryUserStorage {
 
     @Autowired
-    public UserService(InMemoryUserStorage inMemoryUserStorage) {
+    public UserService() {
     }
 
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @NotNull
     public User addFriend(int userId, int friendId) {
         if (users.get(userId) != null & users.get(friendId) != null) {
             logger.debug("Добавление в друзья: {}", users.get(friendId).getName());
@@ -59,16 +57,15 @@ public class UserService extends InMemoryUserStorage {
                 }
             }
         }
-        //if (commonFriends != null) {
-        //return commonFriends;
-        //} else throw new NotFoundException("У пользователей нет общих друзей");
         return commonFriends;
     }
 
     public User findUserById(int userId) {
+        logger.debug("Поиск пользователя: {}", users.get(userId));
         if (users.get(userId) != null) {
             return users.get(userId);
         }
+        logger.debug("Пользователь не найден: {}", users.get(userId));
         throw new NotFoundException("Пользователь не найден");
     }
 }

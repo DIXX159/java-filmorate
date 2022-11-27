@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
-import javax.validation.ConstraintViolationException;
 import java.util.Map;
 
 
@@ -47,7 +46,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleThrowable(final Throwable e) {
+    public ErrorResponse handleThrowable() {
         return new ErrorResponse(
                 "Произошла непредвиденная ошибка."
         );

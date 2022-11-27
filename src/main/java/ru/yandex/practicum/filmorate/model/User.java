@@ -22,7 +22,7 @@ public class User {
 
     private final Set<Integer> friends = new LinkedHashSet<>();
 
-    public void addFriend(int friendId){
+    public void addFriend(int friendId) {
         friends.add(friendId);
     }
 
