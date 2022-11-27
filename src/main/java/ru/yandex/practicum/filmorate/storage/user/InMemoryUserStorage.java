@@ -22,6 +22,10 @@ public class InMemoryUserStorage implements UserStorage {
 
     protected static int idGenerator = 1;
 
+    public int resetIdGenerator() {
+        return idGenerator = 1;
+    }
+
     @Override
     public User addUser(User user) {
         logger.debug("Создание пользователя: {}", user.getName());

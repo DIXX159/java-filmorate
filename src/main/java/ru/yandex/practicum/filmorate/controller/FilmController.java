@@ -7,7 +7,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -21,16 +21,18 @@ public class FilmController {
     }
 
     @GetMapping
-    public Collection<Film> findAll() {
+    public List<Film> findAll() {
         return filmService.findAll();
     }
 
     @GetMapping("/{filmId}")
-    public Film getFilm(@PathVariable("filmId") Integer filmId){return filmService.findFilmById(filmId);
+    public Film getFilm(@PathVariable("filmId") Integer filmId) {
+        return filmService.findFilmById(filmId);
     }
 
     @GetMapping("/popular")
-    public Set<Film> getPopularFilms(@RequestParam(required=false) Integer count){return filmService.getPopularFilms(count);
+    public Set<Film> getPopularFilms(@RequestParam(required = false) Integer count) {
+        return filmService.getPopularFilms(count);
     }
 
     @PostMapping

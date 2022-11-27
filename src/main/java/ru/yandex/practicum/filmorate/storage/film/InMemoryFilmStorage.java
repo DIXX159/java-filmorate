@@ -21,6 +21,10 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     protected static int idGenerator = 1;
 
+    public int resetIdGenerator() {
+        return idGenerator = 1;
+    }
+
 
     public Film addFilm(Film film) throws ValidationException {
         logger.debug("Добавление фильма: {}", film.getName());
@@ -58,5 +62,4 @@ public class InMemoryFilmStorage implements FilmStorage {
             return film;
         }
     }
-
 }

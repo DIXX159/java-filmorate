@@ -31,33 +31,39 @@ public class UserService extends InMemoryUserStorage {
     }
 
     public User deleteFriend(int userId, int friendId) {
-        logger.debug("Удаление из друзей: {}", users.get(friendId).getName());
-        users.get(userId).getFriends().remove(friendId);
-        users.get(friendId).getFriends().remove(userId);
-        return users.get(userId);
+        if (users.get(userId) != null & users.get(friendId) != null) {
+            logger.debug("Удаление из друзей: {}", users.get(friendId).getName());
+            users.get(userId).getFriends().remove(friendId);
+            users.get(friendId).getFriends().remove(userId);
+            return users.get(userId);
+        } else throw new NotFoundException("Пользователь не найден");
     }
 
     public Set<User> getAllFriends(int userId) {
-        logger.debug("Текущее количество друзей: {}", users.get(userId).getFriends().size());
-        Set<User> friends = new LinkedHashSet<>();
-        for (Integer friend : users.get(userId).getFriends()) {
-            friends.add(users.get(friend));
-        }
-        return friends;
+        if (users.get(userId) != null) {
+            logger.debug("Текущее количество друзей: {}", users.get(userId).getFriends().size());
+            Set<User> friends = new LinkedHashSet<>();
+            for (Integer friend : users.get(userId).getFriends()) {
+                friends.add(users.get(friend));
+            }
+            return friends;
+        } else throw new NotFoundException("Пользователь не найден");
     }
 
     public Set<User> getCommonFriends(int userId, int friendId) {
         Set<User> commonFriends = new LinkedHashSet<>();
-        if (users.get(userId).getFriends() != null & users.get(friendId).getFriends() != null) {
-            for (Integer user1 : users.get(userId).getFriends()) {
-                for (Integer user2 : users.get(friendId).getFriends()) {
-                    if (user1.equals(user2)) {
-                        commonFriends.add(users.get(user2));
+        if (users.get(userId) != null & users.get(friendId) != null) {
+            if (users.get(userId).getFriends() != null & users.get(friendId).getFriends() != null) {
+                for (Integer user1 : users.get(userId).getFriends()) {
+                    for (Integer user2 : users.get(friendId).getFriends()) {
+                        if (user1.equals(user2)) {
+                            commonFriends.add(users.get(user2));
+                        }
                     }
                 }
             }
-        }
-        return commonFriends;
+            return commonFriends;
+        } else throw new NotFoundException("Пользователь не найден");
     }
 
     public User findUserById(int userId) {
