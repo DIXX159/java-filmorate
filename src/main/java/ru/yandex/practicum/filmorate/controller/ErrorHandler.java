@@ -38,9 +38,11 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         log.info("400 {}", e.getMessage());
+        String[] errorString = e.getMessage().split(";");
+        String shortErrorString = errorString[errorString.length - 1];
+        String error = shortErrorString.substring(shortErrorString.indexOf('[') + 1, shortErrorString.indexOf(']'));
         return Map.of(
-                "error", "Ошибка валидации.",
-                "errorMessage", e.getMessage()
+                "Ошибка", error
         );
     }
 

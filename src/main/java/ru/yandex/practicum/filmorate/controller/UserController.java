@@ -41,6 +41,7 @@ public class UserController {
         return userService.findAll();
     }
 
+    @Validated
     @PostMapping
     public User create(@Valid @RequestBody @NotNull User user) {
         return userService.addUser(user);

@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,11 +19,11 @@ import static ru.yandex.practicum.filmorate.storage.user.UserStorage.users;
 
 public class FilmControllerTest {
 
-
     static UserService userService = new UserService();
     static UserController userController = new UserController(userService);
+    static InMemoryFilmStorage inMemoryFilmStorage = new InMemoryFilmStorage();
     static FilmService filmService = new FilmService();
-    static FilmController filmController = new FilmController(filmService);
+    static FilmController filmController = new FilmController(filmService, inMemoryFilmStorage);
 
     @BeforeEach
     void beforeEach() throws ValidationException {
