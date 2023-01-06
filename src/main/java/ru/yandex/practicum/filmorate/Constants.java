@@ -4,4 +4,5 @@ public class Constants {
     public static final String userNotFound = "Пользователь не найден";
     public static final String filmNotFound = "Фильм не найден";
 
+    public static final String filmOrUserNotFound = "Фильм или пользователь не найдены";
 }

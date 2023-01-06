@@ -43,7 +43,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     public List<Film> findAll() {
-        log.debug("Текущее количество пользователей: {}", films.size());
+        log.debug("Текущее количество фильмов: {}", films.size());
         return new ArrayList<>(films.values());
     }
 

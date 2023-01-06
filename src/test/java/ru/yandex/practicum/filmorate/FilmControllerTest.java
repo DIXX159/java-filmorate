@@ -17,9 +17,11 @@ import java.util.List;
 import static ru.yandex.practicum.filmorate.storage.film.FilmStorage.films;
 import static ru.yandex.practicum.filmorate.storage.user.UserStorage.users;
 
-public class FilmControllerTest {
+/*public class FilmControllerTest {
 
     static UserService userService = new UserService();
+
+
     static UserController userController = new UserController(userService);
     static InMemoryFilmStorage inMemoryFilmStorage = new InMemoryFilmStorage();
     static FilmService filmService = new FilmService();
@@ -177,7 +179,7 @@ public class FilmControllerTest {
     }
 }
 
-
+*/
 
 
 

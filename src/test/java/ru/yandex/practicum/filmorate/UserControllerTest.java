@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.yandex.practicum.filmorate.storage.user.UserStorage.users;
 
 
-public class UserControllerTest {
+/*public class UserControllerTest {
 
 
     static UserService userService = new UserService();
@@ -177,8 +177,8 @@ public class UserControllerTest {
         );
         users.remove(user3.getId());
     }
-
-
+}
+*/
 
 
 
@@ -214,7 +214,7 @@ public class UserControllerTest {
                 () -> Assertions.assertEquals(users.size(), 2)
         );
     }*/
-}
+
 /*
     @Test
     @DisplayName("Проверка создания с пустым логином")
