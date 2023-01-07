@@ -18,6 +18,9 @@ create table IF NOT EXISTS FILMS
     constraint "FILMS_pk"
         primary key (FILM_ID)
 );
+create unique index FILMS_NAME_DESCRIPTION_DATE_UINDEX
+    on FILMS (FILM_NAME, DESCRIPTION, RELEASE_DATE);
+
 create table IF NOT EXISTS USERS
 (
     USER_ID  integer primary key auto_increment,

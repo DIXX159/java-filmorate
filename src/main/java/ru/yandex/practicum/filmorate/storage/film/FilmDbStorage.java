@@ -30,16 +30,20 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film addFilm(Film film) {
         log.debug("Добавление фильма: {}", film.getName());
-        jdbcTemplate.update("insert into FILMS (FILM_NAME, DESCRIPTION, RELEASE_DATE, DURATION, RATE, MPA) " +
-                        "values (?, ?, ?, ?, ?, ?)",
-                film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(), film.getRate(), film.getMpa().getId());
-        Film film2 = jdbcTemplate.queryForObject("select * from FILMS where FILM_NAME = ?", this::mapRow, film.getName());
-        updateGenre(film);
-        assert film2 != null;
-        film2.setGenres(findGenresByFilmId(film.getId()));
-        updateGenre(film2);
-        jdbcTemplate.update("insert into LIKES values (?, ?, ?)", film2.getId(), null, film.getRate());
-        return film2;
+        try {
+            jdbcTemplate.update("insert into FILMS (FILM_NAME, DESCRIPTION, RELEASE_DATE, DURATION, RATE, MPA) " +
+                            "values (?, ?, ?, ?, ?, ?)",
+                    film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(), film.getRate(), film.getMpa().getId());
+            Film film2 = jdbcTemplate.queryForObject("select * from FILMS where FILM_NAME = ? AND DESCRIPTION = ? AND RELEASE_DATE = ? ", this::mapRow, film.getName(), film.getDescription(), film.getReleaseDate());
+            updateGenre(film);
+            assert film2 != null;
+            film2.setGenres(findGenresByFilmId(film.getId()));
+            updateGenre(film2);
+            jdbcTemplate.update("insert into LIKES values (?, ?, ?)", film2.getId(), null, film.getRate());
+            return film2;
+        } catch (Exception e) {
+            throw new NotFoundException("Такой фильм уже есть");
+        }
     }
 
     public Film findOne(int id) {

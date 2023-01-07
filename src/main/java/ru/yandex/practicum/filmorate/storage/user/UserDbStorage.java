@@ -61,7 +61,7 @@ public class UserDbStorage implements UserStorage {
                     user.getName(),
                     user.getBirthday(),
                     user.getId());
-            return user;
+            return jdbcTemplate.queryForObject("select * from USERS where NAME = ?", this::mapRow, user.getName());
         } catch (NotFoundException e) {
             log.debug("Юзер не найден: {}", user.getName());
             throw new NotFoundException(Constants.userNotFound);
