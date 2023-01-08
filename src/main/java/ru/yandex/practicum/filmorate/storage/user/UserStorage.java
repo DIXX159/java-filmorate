@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 public interface UserStorage {
 
+
     HashMap<Integer, User> users = new HashMap<>();
 
     User addUser(User user) throws ValidationException;

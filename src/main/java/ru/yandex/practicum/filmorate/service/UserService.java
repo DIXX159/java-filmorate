@@ -1,20 +1,44 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.Constants;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
+import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 
 @Slf4j
 @Service
+@Qualifier
 public class UserService extends InMemoryUserStorage {
+    private final UserDbStorage userDbStorage;
+    private final InMemoryUserStorage inMemoryUserStorage;
 
-    public User addFriend(int userId, int friendId) {
+    public UserService(UserDbStorage userDbStorage, InMemoryUserStorage inMemoryUserStorage) {
+        this.userDbStorage = userDbStorage;
+        this.inMemoryUserStorage = inMemoryUserStorage;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /* public User addFriend(int userId, int friendId) {
         if (users.get(userId) != null && users.get(friendId) != null) {
             log.debug("Добавление в друзья: {}", users.get(friendId).getName());
             users.get(userId).addFriend(friendId);
@@ -70,5 +94,4 @@ public class UserService extends InMemoryUserStorage {
         }
         log.debug("Пользователь не найден: {}", users.get(userId));
         throw new NotFoundException(Constants.userNotFound);
-    }
-}
+    }*/

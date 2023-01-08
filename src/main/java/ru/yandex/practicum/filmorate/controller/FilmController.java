@@ -1,60 +1,90 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
+@Slf4j
 @RestController
-@RequestMapping("/films")
+@RequestMapping()
 public class FilmController {
 
-    private final FilmService filmService;
-    private final InMemoryFilmStorage inMemoryFilmStorage;
+    private final FilmDbStorage filmDbStorage;
 
-    public FilmController(FilmService filmService, InMemoryFilmStorage inMemoryFilmStorage) {
-        this.filmService = filmService;
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
+    public FilmController(FilmDbStorage filmDbStorage) {
+        this.filmDbStorage = filmDbStorage;
     }
 
-    @GetMapping
+    @GetMapping("/films")
     public List<Film> findAll() {
-        return inMemoryFilmStorage.findAll();
+        log.info("Поиск всех фильмов:");
+        return filmDbStorage.findAll();
     }
 
-    @GetMapping("/{filmId}")
+    @GetMapping("/films/{filmId}")
     public Film getFilm(@PathVariable("filmId") Integer filmId) {
-        return filmService.findFilmById(filmId);
+        log.info("Поиск фильма:");
+        return filmDbStorage.findOne(filmId);
     }
 
-    @GetMapping("/popular")
-    public Set<Film> getPopularFilms(@RequestParam(required = false) Integer count) {
-        return filmService.getPopularFilms(count);
+    @GetMapping("/films/popular")
+    public List<Film> getPopularFilms(@RequestParam(required = false) Integer count) {
+        log.info("Поиск популярных фильмов:");
+        return filmDbStorage.getPopularFilms(count);
     }
 
-    @PostMapping
-    public Film createFilm(@Valid @RequestBody Film film) throws ValidationException {
-        return inMemoryFilmStorage.addFilm(film);
+    @PostMapping("/films")
+    public Film createFilm(@Valid @RequestBody Film film) {
+        log.info("Добавление фильма:");
+        return filmDbStorage.addFilm(film);
     }
 
-    @PutMapping
-    public Film updateFilm(@RequestBody Film film) throws ValidationException {
-        return inMemoryFilmStorage.updateFilm(film);
+    @PutMapping("/films")
+    public Film updateFilm(@RequestBody Film film) {
+        log.info("Обновление фильма:");
+        return filmDbStorage.updateFilm(film);
     }
 
-    @PutMapping("/{id}/like/{userId}")
+    @PutMapping("/films/{id}/like/{userId}")
     public Film addLike(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
-        return filmService.addLike(id, userId);
+        log.info("Добавление лайка фильму:");
+        return filmDbStorage.addLike(id, userId);
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
-    public Film deleteLike(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
-        return filmService.deleteLike(id, userId);
+    @DeleteMapping("/films/{id}/like/{userId}")
+    public Boolean deleteLike(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
+        log.info("Удаление лайка фильму:");
+        return filmDbStorage.deleteLike(id, userId);
+    }
+
+    @GetMapping("/mpa/{mpaId}")
+    public Mpa findMpa(@PathVariable("mpaId") Integer mpaId) {
+        log.info("Поиск MPA:");
+        return filmDbStorage.findMpa(mpaId);
+    }
+
+    @GetMapping("/mpa")
+    public List<Mpa> findAllMpa() {
+        log.info("Поиск всех MPA:");
+        return filmDbStorage.findAllMpa();
+    }
+
+    @GetMapping("/genres/{genreId}")
+    public Genre findGenre(@PathVariable("genreId") Integer genreId) {
+        log.info("Поиск жанра:");
+        return filmDbStorage.findGenre(genreId);
+    }
+
+    @GetMapping("/genres")
+    public List<Genre> findAllGenre() {
+        log.info("Поиск всех жанров:");
+        return filmDbStorage.findAllGenre();
     }
 }
